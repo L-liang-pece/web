@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>jingfeng hello!!!</title>
+    <title>jingfeng hello</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,20 +25,13 @@
             position: fixed;
             font-size: 50px;
             color: red;
-            animation: floatUp 3s linear infinite;
+            animation: floatUp 3s linear forwards;
             pointer-events: none;
             z-index: 9999;
         }
         @keyframes floatUp {
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
-        }
-        /* 覆盖整个屏幕 */
-        #overlay {
-            position: fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            z-index:500;
         }
         /* 哭泣表情样式 */
         #cryImg {
@@ -47,6 +40,7 @@
             transform: translate(-50%, -50%);
             width:200px;
             z-index:1000;
+            display:none;
         }
     </style>
 </head>
@@ -55,8 +49,7 @@
     <button onclick="examLuck()">考试运气值</button>
     <button onclick="thinkLZW()">今天有没有想lzw</button>
 
-    <div id="overlay"></div>
-    <img id="cryImg" src="" alt="哭泣" style="display:none;">
+    <img id="cryImg" src="" alt="哭泣">
 
     <script>
         // 第一个弹窗
