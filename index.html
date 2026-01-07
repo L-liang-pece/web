@@ -42,21 +42,30 @@
             z-index:1000;
             display:none;
         }
+        /* 容器按钮样式 */
+        #choiceContainer {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>jingfeng hello</h1>
+    <h1>jingfeng hello!</h1>
 
     <button id="examBtn">考试运气值</button>
     <button id="lzwBtn">今天有没有想lzw</button>
 
+    <!-- 用于显示两个选择按钮 -->
+    <div id="choiceContainer"></div>
+
+    <!-- 哭泣表情 -->
     <img id="cryImg" src="" alt="哭泣">
 
     <script>
-        // 等页面完全加载后再绑定事件，保证按钮可点击
         window.onload = function() {
             const examBtn = document.getElementById("examBtn");
             const lzwBtn = document.getElementById("lzwBtn");
+            const choiceContainer = document.getElementById("choiceContainer");
+            const cryImg = document.getElementById("cryImg");
 
             // 第一个按钮
             examBtn.addEventListener("click", function(){
@@ -65,32 +74,50 @@
 
             // 第二个按钮
             lzwBtn.addEventListener("click", function(){
-                let choice = confirm("今天有没有想lzw？\n点击确认=有，取消=没有");
-                if(choice){
-                    // 有 → 生成流动爱心
-                    for(let i=0;i<30;i++){
-                        createHeart();
-                    }
-                } else {
-                    // 没有 → 显示哭泣表情
-                    const cryImg = document.getElementById("cryImg");
-                    cryImg.src = "https://i.imgur.com/6KXJbQJ.png"; // 可以换成你喜欢的表情图片
+                // 清空之前可能存在的按钮
+                choiceContainer.innerHTML = "";
+
+                // 创建“有”按钮
+                const yesBtn = document.createElement("button");
+                yesBtn.textContent = "有";
+                yesBtn.addEventListener("click", function(){
+                    createMultipleHearts(30); // 生成30个爱心
+                    choiceContainer.innerHTML = ""; // 点击后移除选择按钮
+                });
+
+                // 创建“没有”按钮
+                const noBtn = document.createElement("button");
+                noBtn.textContent = "没有";
+                noBtn.addEventListener("click", function(){
+                    cryImg.src = "https://i.imgur.com/6KXJbQJ.png"; // 哭泣表情
                     cryImg.style.display = "block";
                     setTimeout(()=>{ cryImg.style.display="none"; }, 5000);
-                }
-            });
-        }
+                    choiceContainer.innerHTML = ""; // 点击后移除选择按钮
+                });
 
-        // 创建一个飘动爱心
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.style.left = Math.random()*window.innerWidth + "px";
-            heart.innerHTML = "❤️";
-            document.body.appendChild(heart);
-            const duration = 2 + Math.random()*3;
-            heart.style.animationDuration = duration + "s";
-            setTimeout(()=>{ heart.remove(); }, duration*1000);
+                // 将按钮添加到页面
+                choiceContainer.appendChild(yesBtn);
+                choiceContainer.appendChild(noBtn);
+            });
+
+            // 生成一个爱心
+            function createHeart() {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.style.left = Math.random()*window.innerWidth + "px";
+                heart.innerHTML = "❤️";
+                document.body.appendChild(heart);
+                const duration = 2 + Math.random()*3;
+                heart.style.animationDuration = duration + "s";
+                setTimeout(()=>{ heart.remove(); }, duration*1000);
+            }
+
+            // 生成多个爱心
+            function createMultipleHearts(count){
+                for(let i=0;i<count;i++){
+                    createHeart();
+                }
+            }
         }
     </script>
 </body>
