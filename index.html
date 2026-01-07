@@ -2,81 +2,97 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Hello Jingfeng!</title>
+    <title>jingfeng hello!!!</title>
     <style>
-        /* 自定义弹窗样式 */
-        #myModal {
-            display: none; 
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%);
-            background: #fff; 
-            padding: 20px; 
-            border: 2px solid #333;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            z-index: 1000;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f0f0;
         }
+        button {
+            padding: 15px 25px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            background-color: #ff6666;
+            color: white;
+        }
+        /* 爱心样式 */
+        .heart {
+            position: fixed;
+            font-size: 50px;
+            color: red;
+            animation: floatUp 3s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+        /* 覆盖整个屏幕 */
         #overlay {
-            display: none;
-            position: fixed; 
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 500;
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            z-index:500;
+        }
+        /* 哭泣表情样式 */
+        #cryImg {
+            position: fixed;
+            top:50%; left:50%;
+            transform: translate(-50%, -50%);
+            width:200px;
+            z-index:1000;
         }
     </style>
 </head>
 <body>
-    <h1>在干嘛呀>zai 
-
-    <!-- 浏览器自带弹窗 -->
-    <button onclick="showAlert()">复习 </button>
-    <button onclick="askName()">刷抖音 </button>
-    <button onclick="confirmAction()">在想lzw </button>
-
-    <!-- 自定义弹窗 -->
-    <button onclick="openModal()">想打王者</button>
+    <h1>jingfeng hello</h1>
+    <button onclick="examLuck()">考试运气值</button>
+    <button onclick="thinkLZW()">今天有没有想lzw</button>
 
     <div id="overlay"></div>
-    <div id="myModal">
-        <p>这是自定义弹窗！</p>
-        <button onclick="closeModal()">关闭</button>
-    </div>
+    <img id="cryImg" src="" alt="哭泣" style="display:none;">
 
     <script>
-        // alert 弹窗
-        function showAlert() {
-            alert("这是一个简单提示弹窗！");
+        // 第一个弹窗
+        function examLuck() {
+            alert("恭喜你通过了明天的考试！");
         }
 
-        // prompt 弹窗
-        function askName() {
-            let name = prompt("请输入你的名字：");
-            if (name) {
-                alert("你好，" + name + "！");
+        // 第二个弹窗
+        function thinkLZW() {
+            let choice = confirm("今天有没有想lzw？\n点击确认=有，取消=没有");
+            if(choice){
+                // 有 → 生成流动爱心
+                for(let i=0;i<30;i++){
+                    createHeart();
+                }
             } else {
-                alert("你没有输入名字。");
+                // 没有 → 显示哭泣表情
+                let cryImg = document.getElementById("cryImg");
+                cryImg.src = "https://i.imgur.com/6KXJbQJ.png"; // 示例哭泣表情图片
+                cryImg.style.display = "block";
+                setTimeout(()=>{ cryImg.style.display="none"; }, 5000);
             }
         }
 
-        // confirm 弹窗
-        function confirmAction() {
-            if (confirm("你确定要删除吗？")) {
-                alert("已删除！");
-            } else {
-                alert("已取消！");
-            }
-        }
-
-        // 自定义弹窗
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
+        // 创建一个飘动爱心
+        function createHeart() {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.style.left = Math.random()*window.innerWidth + "px";
+            heart.innerHTML = "❤️";
+            document.body.appendChild(heart);
+            // 随机动画时长
+            let duration = 2 + Math.random()*3;
+            heart.style.animationDuration = duration + "s";
+            // 动画结束后删除
+            setTimeout(()=>{ heart.remove(); }, duration*1000);
         }
     </script>
 </body>
