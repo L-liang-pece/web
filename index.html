@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>jingfeng hello!!!</title>
+    <title>jingfeng hello!!!!!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
         }
         button {
             padding: 15px 25px;
-            margin: 10px;
+            margin: 15px;
             font-size: 18px;
             cursor: pointer;
             border-radius: 8px;
@@ -46,45 +46,50 @@
 </head>
 <body>
     <h1>jingfeng hello</h1>
-    <button onclick="examLuck()">考试运气值</button>
-    <button onclick="thinkLZW()">今天有没有想lzw</button>
+
+    <button id="examBtn">考试运气值</button>
+    <button id="lzwBtn">今天有没有想lzw</button>
 
     <img id="cryImg" src="" alt="哭泣">
 
     <script>
-        // 第一个弹窗
-        function examLuck() {
-            alert("恭喜你通过了明天的考试！");
-        }
+        // 等页面完全加载后再绑定事件，保证按钮可点击
+        window.onload = function() {
+            const examBtn = document.getElementById("examBtn");
+            const lzwBtn = document.getElementById("lzwBtn");
 
-        // 第二个弹窗
-        function thinkLZW() {
-            let choice = confirm("今天有没有想lzw？\n点击确认=有，取消=没有");
-            if(choice){
-                // 有 → 生成流动爱心
-                for(let i=0;i<30;i++){
-                    createHeart();
+            // 第一个按钮
+            examBtn.addEventListener("click", function(){
+                alert("恭喜你通过了明天的考试！");
+            });
+
+            // 第二个按钮
+            lzwBtn.addEventListener("click", function(){
+                let choice = confirm("今天有没有想lzw？\n点击确认=有，取消=没有");
+                if(choice){
+                    // 有 → 生成流动爱心
+                    for(let i=0;i<30;i++){
+                        createHeart();
+                    }
+                } else {
+                    // 没有 → 显示哭泣表情
+                    const cryImg = document.getElementById("cryImg");
+                    cryImg.src = "https://i.imgur.com/6KXJbQJ.png"; // 可以换成你喜欢的表情图片
+                    cryImg.style.display = "block";
+                    setTimeout(()=>{ cryImg.style.display="none"; }, 5000);
                 }
-            } else {
-                // 没有 → 显示哭泣表情
-                let cryImg = document.getElementById("cryImg");
-                cryImg.src = "https://i.imgur.com/6KXJbQJ.png"; // 示例哭泣表情图片
-                cryImg.style.display = "block";
-                setTimeout(()=>{ cryImg.style.display="none"; }, 5000);
-            }
+            });
         }
 
         // 创建一个飘动爱心
         function createHeart() {
-            let heart = document.createElement("div");
+            const heart = document.createElement("div");
             heart.className = "heart";
             heart.style.left = Math.random()*window.innerWidth + "px";
             heart.innerHTML = "❤️";
             document.body.appendChild(heart);
-            // 随机动画时长
-            let duration = 2 + Math.random()*3;
+            const duration = 2 + Math.random()*3;
             heart.style.animationDuration = duration + "s";
-            // 动画结束后删除
             setTimeout(()=>{ heart.remove(); }, duration*1000);
         }
     </script>
