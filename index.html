@@ -3,102 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Filename Generator & Prime Checker</title>
+    <title>Liang - Filename Generator & Prime Checker</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #000;
+            color: #f5f5f7;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            line-height: 1.5;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            background: #1d1d1f;
+            border-radius: 18px;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid #3a3a3c;
         }
 
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
+            background: #000;
+            padding: 40px 60px;
             text-align: center;
+            border-bottom: 1px solid #3a3a3c;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            color: #fff;
         }
 
         .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 21px;
+            color: #86868b;
+            font-weight: 400;
         }
 
         .main-content {
-            padding: 40px;
+            padding: 40px 60px;
         }
 
         .user-info {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #4facfe;
+            margin-bottom: 40px;
+            padding: 24px;
+            background: #2c2c2e;
+            border-radius: 12px;
+            border: 1px solid #3a3a3c;
         }
 
         .user-info h3 {
-            color: #333;
-            margin-bottom: 10px;
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .user-info p {
+            color: #86868b;
+            font-size: 17px;
         }
 
         .menu {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 16px;
+            margin-bottom: 40px;
             flex-wrap: wrap;
         }
 
         .menu-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 14px 28px;
+            background: #3a3a3c;
+            color: #f5f5f7;
             border: none;
-            border-radius: 25px;
+            border-radius: 100px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 17px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 1px solid #4a4a4c;
         }
 
         .menu-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #515154;
+            transform: scale(1.02);
         }
 
         .menu-btn.active {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #0071e3;
+            color: white;
+            border-color: #0071e3;
         }
 
         .function-section {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         .function-section.active {
@@ -106,135 +120,138 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 10px;
+            font-size: 17px;
+            font-weight: 500;
+            color: #f5f5f7;
         }
 
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e9ecef;
+            padding: 14px 16px;
+            background: #2c2c2e;
+            border: 1px solid #3a3a3c;
             border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
+            font-size: 17px;
+            color: #f5f5f7;
+            transition: border-color 0.2s ease;
         }
 
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+            border-color: #0071e3;
         }
 
         .btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #0071e3;
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 14px 32px;
+            border-radius: 100px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 17px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #0077ed;
+            transform: scale(1.02);
         }
 
         .result {
-            margin-top: 20px;
+            margin-top: 24px;
             padding: 20px;
-            border-radius: 10px;
-            background: #f8f9fa;
-            border-left: 5px solid #28a745;
+            background: #2c2c2e;
+            border-radius: 12px;
+            border: 1px solid #3a3a3c;
             display: none;
         }
 
         .result.show {
             display: block;
-            animation: slideIn 0.5s ease;
+            animation: slideIn 0.3s ease;
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
+            from { opacity: 0; transform: translateX(-8px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
         .result h3 {
-            color: #28a745;
-            margin-bottom: 10px;
+            color: #fff;
+            font-size: 17px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .result p {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .prime-result {
-            border-left-color: #ffc107;
-        }
-
-        .prime-result h3 {
-            color: #ffc107;
+            font-size: 22px;
+            font-weight: 500;
+            color: #fff;
         }
 
         .prime-true {
-            color: #28a745 !important;
+            color: #32d74b !important;
         }
 
         .prime-false {
-            color: #dc3545 !important;
+            color: #ff375f !important;
         }
 
         .quit-section {
             text-align: center;
-            padding: 40px;
+            padding: 60px 40px;
         }
 
         .quit-btn {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            padding: 15px 40px;
-            border-radius: 25px;
-            color: white;
+            background: #3a3a3c;
+            padding: 14px 40px;
+            border-radius: 100px;
+            color: #f5f5f7;
             text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 17px;
+            font-weight: 500;
+            transition: all 0.2s ease;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #4a4a4c;
         }
 
         .quit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #515154;
+            transform: scale(1.02);
         }
 
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
-                border-radius: 15px;
+                border-radius: 16px;
+            }
+            
+            .header {
+                padding: 30px 20px;
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 36px;
+            }
+            
+            .header p {
+                font-size: 18px;
             }
             
             .main-content {
-                padding: 20px;
+                padding: 30px 20px;
             }
             
             .menu {
@@ -252,26 +269,26 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Advanced Tool Suite</h1>
+            <h1>Liang</h1>
             <p>Filename Generator & Prime Number Checker</p>
         </div>
         
         <div class="main-content">
             <div class="user-info">
-                <h3 id="welcome-message">Welcome, User! 👋</h3>
-                <p>Let's start the program and explore powerful tools!</p>
+                <h3 id="welcome-message">Welcome, User</h3>
+                <p>Let's start the program and explore powerful tools</p>
             </div>
             
             <div class="menu">
-                <button class="menu-btn" onclick="showSection('filename-section')">📁 Create Filename</button>
-                <button class="menu-btn" onclick="showSection('prime-section')">🔢 Check Prime Number</button>
-                <button class="menu-btn" onclick="showSection('quit-section')">🚪 Quit</button>
+                <button class="menu-btn" onclick="showSection('filename-section')">Create Filename</button>
+                <button class="menu-btn" onclick="showSection('prime-section')">Check Prime Number</button>
+                <button class="menu-btn" onclick="showSection('quit-section')">Quit</button>
             </div>
             
             <!-- Filename Section -->
             <div id="filename-section" class="function-section">
-                <h2>📁 Create Filename</h2>
-                <p>Generate formatted filenames with class name and student ID</p>
+                <h2 style="font-size: 28px; color: #fff; margin-bottom: 20px; font-weight: 600;">Create Filename</h2>
+                <p style="color: #86868b; margin-bottom: 24px;">Generate formatted filenames with class name and student ID</p>
                 
                 <div class="form-group">
                     <label for="filename-input">Enter class name and student ID (e.g., History 1029 1030):</label>
@@ -281,15 +298,15 @@
                 <button class="btn" onclick="generateFilename()">Generate Filename</button>
                 
                 <div id="filename-result" class="result">
-                    <h3>✅ Filename Created:</h3>
+                    <h3>Filename Created:</h3>
                     <p id="filename-output"></p>
                 </div>
             </div>
             
             <!-- Prime Number Section -->
             <div id="prime-section" class="function-section">
-                <h2>🔢 Prime Number Checker</h2>
-                <p>Check if a number is prime based on custom rules</p>
+                <h2 style="font-size: 28px; color: #fff; margin-bottom: 20px; font-weight: 600;">Prime Number Checker</h2>
+                <p style="color: #86868b; margin-bottom: 24px;">Check if a number is prime based on custom rules</p>
                 
                 <div class="form-group">
                     <label for="prime-input">Enter a number to check:</label>
@@ -298,16 +315,16 @@
                 
                 <button class="btn" onclick="checkPrime()">Check Prime</button>
                 
-                <div id="prime-result" class="result prime-result">
-                    <h3>🔍 Result:</h3>
+                <div id="prime-result" class="result">
+                    <h3>Result:</h3>
                     <p id="prime-output"></p>
                 </div>
             </div>
             
             <!-- Quit Section -->
             <div id="quit-section" class="function-section quit-section">
-                <h2>👋 Goodbye!</h2>
-                <p>Thank you for using our program. See you next time!</p>
+                <h2 style="font-size: 28px; color: #fff; margin-bottom: 16px; font-weight: 600;">Goodbye</h2>
+                <p style="color: #86868b; margin-bottom: 24px;">Thank you for using our program. See you next time</p>
                 <a href="#" class="quit-btn" onclick="resetProgram()">Start New Session</a>
             </div>
         </div>
@@ -316,7 +333,7 @@
     <script>
         // Set user name
         const userName = prompt("Please input your name:", "User") || "User";
-        document.getElementById('welcome-message').textContent = `Welcome, ${userName}! 👋`;
+        document.getElementById('welcome-message').textContent = `Welcome, ${userName}`;
 
         // Show section function
         function showSection(sectionId) {
