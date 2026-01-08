@@ -1,355 +1,424 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>jingfeng hello</title>
-    <!-- 引入鼠标特效和点击爱心的外部脚本 -->
-    <script src="https://cdn.jsdelivr.net/gh/zyoushuo/Blog/hexo/js/mouse_slide.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zyoushuo/Blog/hexo/js/clicklove.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Filename Generator & Prime Checker</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        button {
-            padding: 15px 25px;
-            margin: 15px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 8px;
-            border: none;
-            background-color: #ff6666;
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
+            padding: 30px;
+            text-align: center;
         }
-        /* 漂浮爱心样式 */
-        .heart {
-            position: fixed;
-            font-size: 50px;
-            color: red;
-            animation: floatUp 3s linear forwards;
-            pointer-events: none;
-            z-index: 9999;
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
         }
-        /* 哭泣表情样式 */
-        #cryImg {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            z-index: 1000;
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .user-info {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .user-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .menu-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .function-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .function-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #28a745;
             display: none;
         }
-        /* 粒子爱心画布样式 */
-        #pinkboard {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 9998;
-            display: none;
-            background: rgba(0,0,0,0.8);
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease;
         }
-        /* 粒子爱心文字样式 */
-        .namebox {
-            color: #fff;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            display: none;
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        .namebox h1 {
-            margin: 0 auto;
-            font-size: 3em;
+
+        .result h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .prime-result {
+            border-left-color: #ffc107;
+        }
+
+        .prime-result h3 {
+            color: #ffc107;
+        }
+
+        .prime-true {
+            color: #28a745 !important;
+        }
+
+        .prime-false {
+            color: #dc3545 !important;
+        }
+
+        .quit-section {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .quit-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            padding: 15px 40px;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .quit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .menu-btn {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>jingfeng hello</h1>
-
-    <button id="examBtn">考试运气值</button>
-    <button id="lzwBtn">今天有没有想lzw</button>
-
-    <div id="choiceContainer"></div>
-    <img id="cryImg" src="https://i.imgur.com/6KXJbQJ.png" alt="哭泣">
-
-    <!-- 粒子爱心画布和文字 -->
-    <canvas id="pinkboard"></canvas>
-    <div class="namebox">
-        <h1>GJF&#10084;&#65039;LZW</h1>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Advanced Tool Suite</h1>
+            <p>Filename Generator & Prime Number Checker</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="user-info">
+                <h3 id="welcome-message">Welcome, User! 👋</h3>
+                <p>Let's start the program and explore powerful tools!</p>
+            </div>
+            
+            <div class="menu">
+                <button class="menu-btn" onclick="showSection('filename-section')">📁 Create Filename</button>
+                <button class="menu-btn" onclick="showSection('prime-section')">🔢 Check Prime Number</button>
+                <button class="menu-btn" onclick="showSection('quit-section')">🚪 Quit</button>
+            </div>
+            
+            <!-- Filename Section -->
+            <div id="filename-section" class="function-section">
+                <h2>📁 Create Filename</h2>
+                <p>Generate formatted filenames with class name and student ID</p>
+                
+                <div class="form-group">
+                    <label for="filename-input">Enter class name and student ID (e.g., History 1029 1030):</label>
+                    <input type="text" id="filename-input" placeholder="Enter your input here...">
+                </div>
+                
+                <button class="btn" onclick="generateFilename()">Generate Filename</button>
+                
+                <div id="filename-result" class="result">
+                    <h3>✅ Filename Created:</h3>
+                    <p id="filename-output"></p>
+                </div>
+            </div>
+            
+            <!-- Prime Number Section -->
+            <div id="prime-section" class="function-section">
+                <h2>🔢 Prime Number Checker</h2>
+                <p>Check if a number is prime based on custom rules</p>
+                
+                <div class="form-group">
+                    <label for="prime-input">Enter a number to check:</label>
+                    <input type="number" id="prime-input" placeholder="Enter a positive number...">
+                </div>
+                
+                <button class="btn" onclick="checkPrime()">Check Prime</button>
+                
+                <div id="prime-result" class="result prime-result">
+                    <h3>🔍 Result:</h3>
+                    <p id="prime-output"></p>
+                </div>
+            </div>
+            
+            <!-- Quit Section -->
+            <div id="quit-section" class="function-section quit-section">
+                <h2>👋 Goodbye!</h2>
+                <p>Thank you for using our program. See you next time!</p>
+                <a href="#" class="quit-btn" onclick="resetProgram()">Start New Session</a>
+            </div>
+        </div>
     </div>
 
     <script>
-        window.onload = function() {
-            const examBtn = document.getElementById("examBtn");
-            const lzwBtn = document.getElementById("lzwBtn");
-            const choiceContainer = document.getElementById("choiceContainer");
-            const cryImg = document.getElementById("cryImg");
-            const pinkboard = document.getElementById("pinkboard");
-            const namebox = document.querySelector(".namebox");
+        // Set user name
+        const userName = prompt("Please input your name:", "User") || "User";
+        document.getElementById('welcome-message').textContent = `Welcome, ${userName}! 👋`;
 
-            // 考试按钮逻辑
-            examBtn.addEventListener("click", function(){
-                alert("恭喜你通过了明天的考试！");
+        // Show section function
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.function-section').forEach(section => {
+                section.classList.remove('active');
             });
-
-            // 想lzw按钮逻辑
-            lzwBtn.addEventListener("click", function(){
-                choiceContainer.innerHTML = "";
-                // 有按钮 - 触发粒子爱心+鼠标星星特效
-                const yesBtn = document.createElement("button");
-                yesBtn.textContent = "有";
-                yesBtn.addEventListener("click", function(){
-                    choiceContainer.innerHTML = "";
-                    // 显示粒子画布和文字
-                    pinkboard.style.display = "block";
-                    namebox.style.display = "block";
-                    // 执行粒子爱心动画
-                    initParticleHeart();
-                });
-
-                // 没有按钮 - 显示哭泣表情
-                const noBtn = document.createElement("button");
-                noBtn.textContent = "没有";
-                noBtn.addEventListener("click", function(){
-                    cryImg.style.display = "block";
-                    setTimeout(()=>{ cryImg.style.display="none"; }, 5000);
-                    choiceContainer.innerHTML = "";
-                });
-
-                choiceContainer.appendChild(yesBtn);
-                choiceContainer.appendChild(noBtn);
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
-
-            // 原漂浮爱心生成函数
-            function createHeart() {
-                const heart = document.createElement("div");
-                heart.className = "heart";
-                heart.style.left = Math.random()*window.innerWidth + "px";
-                heart.innerHTML = "❤️";
-                document.body.appendChild(heart);
-                const duration = 2 + Math.random()*3;
-                heart.style.animationDuration = duration + "s";
-                setTimeout(()=>{ heart.remove(); }, duration*1000);
-            }
-            function createMultipleHearts(count){
-                for(let i=0;i<count;i++){
-                    createHeart();
-                }
-            }
-
-            // 粒子爱心动画核心函数
-            function initParticleHeart() {
-                var settings = {
-                    particles: {
-                        length: 500,
-                        duration: 2,
-                        velocity: 100,
-                        effect: -0.75,
-                        size: 30,
-                    },
-                };
-
-                (function(){
-                    var b=0;
-                    var c=["ms","moz","webkit","o"];
-                    for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){
-                        window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];
-                        window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"];
-                    }
-                    if(!window.requestAnimationFrame){
-                        window.requestAnimationFrame=function(h,e){
-                            var d=new Date().getTime();
-                            var f=Math.max(0,16-(d-b));
-                            var g=window.setTimeout(function(){h(d+f)},f);
-                            b=d+f;
-                            return g;
-                        };
-                    }
-                    if(!window.cancelAnimationFrame){
-                        window.cancelAnimationFrame=function(d){clearTimeout(d);};
-                    }
-                })();
-
-                var Point = (function() {
-                    function Point(x, y) {
-                        this.x = (typeof x !== 'undefined') ? x : 0;
-                        this.y = (typeof y !== 'undefined') ? y : 0;
-                    }
-                    Point.prototype.clone = function() {
-                        return new Point(this.x, this.y);
-                    };
-                    Point.prototype.length = function(length) {
-                        if (typeof length == 'undefined')
-                            return Math.sqrt(this.x * this.x + this.y * this.y);
-                        this.normalize();
-                        this.x *= length;
-                        this.y *= length;
-                        return this;
-                    };
-                    Point.prototype.normalize = function() {
-                        var length = this.length();
-                        this.x /= length;
-                        this.y /= length;
-                        return this;
-                    };
-                    return Point;
-                })();
-
-                var Particle = (function() {
-                    function Particle() {
-                        this.position = new Point();
-                        this.velocity = new Point();
-                        this.acceleration = new Point();
-                        this.age = 0;
-                    }
-                    Particle.prototype.initialize = function(x, y, dx, dy) {
-                        this.position.x = x;
-                        this.position.y = y;
-                        this.velocity.x = dx;
-                        this.velocity.y = dy;
-                        this.acceleration.x = dx * settings.particles.effect;
-                        this.acceleration.y = dy * settings.particles.effect;
-                        this.age = 0;
-                    };
-                    Particle.prototype.update = function(deltaTime) {
-                        this.position.x += this.velocity.x * deltaTime;
-                        this.position.y += this.velocity.y * deltaTime;
-                        this.velocity.x += this.acceleration.x * deltaTime;
-                        this.velocity.y += this.acceleration.y * deltaTime;
-                        this.age += deltaTime;
-                    };
-                    Particle.prototype.draw = function(context, image) {
-                        function ease(t) {
-                            return (--t) * t * t + 1;
-                        }
-                        var size = image.width * ease(this.age / settings.particles.duration);
-                        context.globalAlpha = 1 - this.age / settings.particles.duration;
-                        context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
-                    };
-                    return Particle;
-                })();
-
-                var ParticlePool = (function() {
-                    var particles, firstActive = 0, firstFree = 0, duration = settings.particles.duration;
-                    function ParticlePool(length) {
-                        particles = new Array(length);
-                        for (var i = 0; i < particles.length; i++)
-                            particles[i] = new Particle();
-                    }
-                    ParticlePool.prototype.add = function(x, y, dx, dy) {
-                        particles[firstFree].initialize(x, y, dx, dy);
-                        firstFree++;
-                        if (firstFree == particles.length) firstFree = 0;
-                        if (firstActive == firstFree ) firstActive++;
-                        if (firstActive == particles.length) firstActive = 0;
-                    };
-                    ParticlePool.prototype.update = function(deltaTime) {
-                        var i;
-                        if (firstActive < firstFree) {
-                            for (i = firstActive; i < firstFree; i++)
-                                particles[i].update(deltaTime);
-                        }
-                        if (firstFree < firstActive) {
-                            for (i = firstActive; i < particles.length; i++)
-                                particles[i].update(deltaTime);
-                            for (i = 0; i < firstFree; i++)
-                                particles[i].update(deltaTime);
-                        }
-                        while (particles[firstActive].age >= duration && firstActive != firstFree) {
-                            firstActive++;
-                            if (firstActive == particles.length) firstActive = 0;
-                        }
-                    };
-                    ParticlePool.prototype.draw = function(context, image) {
-                        if (firstActive < firstFree) {
-                            for (i = firstActive; i < firstFree; i++)
-                                particles[i].draw(context, image);
-                        }
-                        if (firstFree < firstActive) {
-                            for (i = firstActive; i < particles.length; i++)
-                                particles[i].draw(context, image);
-                            for (i = 0; i < firstFree; i++)
-                                particles[i].draw(context, image);
-                        }
-                    };
-                    return ParticlePool;
-                })();
-
-                (function(canvas) {
-                    var context = canvas.getContext('2d'),
-                            particles = new ParticlePool(settings.particles.length),
-                            particleRate = settings.particles.length / settings.particles.duration,
-                            time;
-
-                    function pointOnHeart(t) {
-                        return new Point(
-                                160 * Math.pow(Math.sin(t), 3),
-                                130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
-                        );
-                    }
-
-                    var image = (function() {
-                        var canvas = document.createElement("canvas"),
-                                context = canvas.getContext('2d');
-                        canvas.width = settings.particles.size;
-                        canvas.height = settings.particles.size;
-                        function to(t) {
-                            var point = pointOnHeart(t);
-                            point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
-                            point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
-                            return point;
-                        }
-                        context.beginPath();
-                        var t = -Math.PI;
-                        var point = to(t);
-                        context.moveTo(point.x, point.y);
-                        while (t < Math.PI) {
-                            t += 0.01;
-                            point = to(t);
-                            context.lineTo(point.x, point.y);
-                        }
-                        context.closePath();
-                        context.fillStyle = '#ff30c5';
-                        context.fill();
-                        var image = new Image();
-                        image.src = canvas.toDataURL();
-                        return image;
-                    })();
-
-                    function render() {
-                        requestAnimationFrame(render);
-                        var newTime = new Date().getTime() / 1000,
-                                deltaTime = newTime - (time || newTime);
-                        time = newTime;
-                        context.clearRect(0, 0, canvas.width, canvas.height);
-                        var amount = particleRate * deltaTime;
-                        for (var i = 0; i < amount; i++) {
-                            var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-                            var dir = pos.clone().length(settings.particles.velocity);
-                            particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
-                        }
-                        particles.update(deltaTime);
-                        particles.draw(context, image);
-                    }
-
-                    function onResize() {
-                        canvas.width = canvas.clientWidth;
-                        canvas.height = canvas.clientHeight;
-                    }
-                    window.onresize = onResize;
-                    setTimeout(function() {
-                        onResize();
-                        render();
-                    }, 10);
-                })(pinkboard);
-            }
+            
+            // Show selected section and highlight button
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Highlight the clicked button
+            event.target.classList.add('active');
+            
+            // Hide results when switching sections
+            document.getElementById('filename-result').classList.remove('show');
+            document.getElementById('prime-result').classList.remove('show');
         }
+
+        // Generate filename function
+        function generateFilename() {
+            const input = document.getElementById('filename-input').value.trim();
+            
+            if (!input) {
+                alert('Please enter a value!');
+                return;
+            }
+            
+            // Parse the input to get first 3 chars of class name and first number after space
+            const spaceIndex = input.indexOf(' ');
+            let result = '';
+            
+            if (spaceIndex !== -1) {
+                const className = input.substring(0, spaceIndex);
+                const firstThree = className.substring(0, 3);
+                const rest = input.substring(spaceIndex + 1);
+                
+                // Find the next space to get only the first number
+                const nextSpace = rest.indexOf(' ');
+                let numberPart = rest;
+                if (nextSpace !== -1) {
+                    numberPart = rest.substring(0, nextSpace);
+                }
+                
+                result = firstThree + numberPart + '.pdf';
+            } else {
+                // If no space, just take first 3 chars + .pdf
+                result = input.substring(0, 3) + '.pdf';
+            }
+            
+            document.getElementById('filename-output').textContent = result;
+            document.getElementById('filename-result').classList.add('show');
+        }
+
+        // Check prime function
+        function checkPrime() {
+            const input = document.getElementById('prime-input').value.trim();
+            
+            if (!input) {
+                alert('Please enter a number!');
+                return;
+            }
+            
+            const number = parseInt(input);
+            
+            if (isNaN(number) || number < 0) {
+                document.getElementById('prime-output').innerHTML = 'Please enter a number greater than or equal to 0';
+                document.getElementById('prime-output').className = '';
+                document.getElementById('prime-result').classList.add('show');
+                return;
+            }
+            
+            // Custom prime rule: > 4 is prime, <= 4 is not prime
+            const isPrime = number > 4;
+            const resultText = isPrime 
+                ? `${number} is a prime number.` 
+                : `${number} is NOT a prime number.`;
+            
+            const resultElement = document.getElementById('prime-output');
+            resultElement.textContent = resultText;
+            resultElement.className = isPrime ? 'prime-true' : 'prime-false';
+            document.getElementById('prime-result').classList.add('show');
+        }
+
+        // Reset program function
+        function resetProgram() {
+            location.reload();
+        }
+
+        // Add Enter key support for inputs
+        document.getElementById('filename-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') generateFilename();
+        });
+
+        document.getElementById('prime-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPrime();
+        });
     </script>
 </body>
 </html>
